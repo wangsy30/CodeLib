@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<opencv_storage>
+  <intrMatrix type_id="opencv-matrix">
+    <rows>3</rows>
+    <cols>3</cols>
+    <dt>d</dt>
+    <data>
+      4.88214300000000000e+02 0 512 0.
+      4.88213999999999999e+02 256 0. 0. 1.
+    </data>
+  </intrMatrix>
+
+  <distCoeffs type_id="opencv-matrix">
+    <rows>5</rows>
+    <cols>1</cols>
+    <dt>d</dt>
+    <data>0 0 0 0 0</data>
+  </distCoeffs>
+<!-- kalman filter parameters -->
+  <R>1e-5</R>
+  <Q>1e-5</Q>
+</opencv_storage>

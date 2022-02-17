@@ -1,0 +1,2 @@
+/usr/bin/ar qc libprocessbox.a  CMakeFiles/processbox.dir/ProcessBox.cpp.o
+/usr/bin/ranlib libprocessbox.a

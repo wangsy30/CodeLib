@@ -1,0 +1,56 @@
+cmake_minimum_required(VERSION 3.5)
+project(AutoAim_VREP)
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")
+set(CMAKE_CXX_STANDARD 11)
+# set(CMAKE_PREFIX_PATH "/usr/local/opencv/opencv-4.5.1")
+
+
+find_package(OpenCV REQUIRED)
+
+# dir for lib & src
+add_subdirectory(./CoppeliaSim)
+add_subdirectory(para)
+add_subdirectory(ProcessBox)
+
+include_directories(
+        ${OpenCV_INCLUDE_DIRS}
+        /usr/include/eigen3
+        ${Sophus_INCLUDE_DIRS}
+		CoppeliaSim
+		CoppeliaSim/include
+		CoppeliaSim/remoteApi
+		CoppeliaSim/include/stack
+		thread/inc
+		para
+		ProcessBox
+)
+
+
+add_executable(AutoAim_VREP
+        main.cpp
+		armorDetector.cpp
+        )
+add_library(
+		thread
+		thread/src/thread.cpp
+		thread/src/cameraThread.cpp
+		thread/src/serialPortReadThread.cpp
+		thread/src/serialPortWriteThread.cpp
+)
+
+target_link_libraries(
+		AutoAim_VREP
+		thread
+		para
+		processbox
+		#coppeliaSim
+		coppeliaSim_client
+		${OpenCV_LIBS}
+		# -lopencv_video
+		-lboost_system
+		-lboost_filesystem
+		-lpthread
+        )
+

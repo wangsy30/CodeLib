@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/wang/AutoAim_VREP/para/Parameter.cpp
+Parameter.h
+/home/wang/AutoAim_VREP/para/Parameter.h
+
+/home/wang/AutoAim_VREP/para/Parameter.h
+iostream
+-
+opencv2/core.hpp
+-
+string
+-
+Eigen/Core
+-
+Eigen/Geometry
+-
+

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libpara.a  CMakeFiles/para.dir/Parameter.cpp.o
+/usr/bin/ranlib libpara.a
