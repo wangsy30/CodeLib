@@ -116,6 +116,11 @@ bool ProcessBox::FigureProcess(Mat& src,vector<Point2f>& corners,Mat& src_roi) {
                             Left_down((Left_.at(2).x + Left_.at(3).x)/2,(Left_.at(2).y + Left_.at(3).y)/2),
                             Right_up((Right_.at(0).x + Right_.at(1).x)/2,(Right_.at(0).y + Right_.at(1).y)/2),
                             Right_down((Right_.at(2).x + Right_.at(3).x)/2,(Right_.at(2).y + Right_.at(3).y)/2);
+                    if(Left_up.x == 1 || Left_up.y == 1
+                    || Left_down.x == 1 || Left_down.y == src.rows
+                    || Right_up.x == src.cols || Right_up.y == 1
+                    || Right_down.x == src.cols || Right_down.y == src.rows)
+                        continue;
                     float Left_k = (Left_up.x - Left_down.x) / (Left_up.y - Left_down.y);
                     float Right_k = (Right_up.x - Right_down.x) / (Right_up.y - Right_down.y);
                     float width = sqrt(pow(Left_up.x - Left_down.x,2) + pow(Left_up.y - Left_down.y,2));
@@ -208,8 +213,14 @@ void ProcessBox::GetOrder(const std::vector<cv::Point2f>&corners,Mat& frame,cons
     putText(frame,format("base frame :  X : %f  Y : %f  Z : %f",Tvec_base(0),Tvec_base(1),Tvec_base(2)),cv::Point(20, 60), cv::FONT_HERSHEY_PLAIN, 1.25, cv::Scalar(23, 243, 2), 2);
 #if defined(_USE_KALMAN_)
     KalmanPredict();
-    send_data.yaw = pose_correct.at<float>(0) + dt * pose_correct.at<float>(2);
-    send_data.pitch = pose_correct.at<float>(1) + dt * pose_correct.at<float>(3);
+    send_data.yaw = -(pose_correct.at<float>(0) + 10*dt * pose_correct.at<float>(2))*180/M_PI;
+    send_data.pitch = -(pose_correct.at<float>(1) + 10*dt * pose_correct.at<float>(3))*180/M_PI;
+    cout << "[optimized]: yaw  " << -send_data.yaw << "   pitch  " << -send_data.pitch << endl;
+#else
+    float _yaw = atan2(Tvec_base(0),Tvec_base(2));
+    float _pitch = atan2(-Tvec_base(1),sqrt(pow(Tvec_base(0),2)+pow(Tvec_base(2),2)));;
+    send_data.yaw = -_yaw*180/M_PI;
+    send_data.pitch = -_pitch*180/M_PI;   
 #endif
 }
 
@@ -218,6 +229,7 @@ void ProcessBox::KalmanPredict(){
     yaw_m[1] = atan2(Tvec_base(0),Tvec_base(2));
     pitch_m[1] = atan2(-Tvec_base(1),sqrt(pow(Tvec_base(0),2)+pow(Tvec_base(2),2)));
     if(first_time == 1){
+        // cout << "kalman init start" << endl;
         first_time = 0;
         v_yaw_m = 0;
         v_pitch_m = 0;
@@ -225,6 +237,7 @@ void ProcessBox::KalmanPredict(){
         const int state_num = 4;//x 4x1
         const int measure_num = 4;//z 4x1
         kalman.init(state_num,measure_num,0);
+        measurement = Mat::zeros(4, 1, CV_32F);
         kalman.transitionMatrix = (Mat_<float>(4, 4) << 1 ,0 ,dt,0 ,
                                                         0 ,1 ,0 ,dt,
                                                         0 ,0 ,1 ,0 ,
@@ -239,20 +252,21 @@ void ProcessBox::KalmanPredict(){
         kalman.statePost.at<float>(1) = pitch_m[1];
         kalman.statePost.at<float>(2) = 0;
         kalman.statePost.at<float>(3) = 0;
-
+        cout << "kalman init done" << endl;
     }else{
-        v_yaw_m = yaw_m[1] - yaw_m[0];
-        v_pitch_m = pitch_m[1] - pitch_m[0];
+        v_yaw_m = (yaw_m[1] - yaw_m[0])/dt;
+        v_pitch_m = (pitch_m[1] - pitch_m[0])/dt;
+        // cout << v_yaw_m << " " << v_pitch_m << endl;
     }
     yaw_m[0] = yaw_m[1];
     pitch_m[0] = pitch_m[1];
     
     //update measurement z
-    measurement.at<double>(0) = yaw_m[1];
-    measurement.at<double>(1) = pitch_m[1];
-    measurement.at<double>(2) = v_yaw_m;
-    measurement.at<double>(3) = v_pitch_m;
-
+    
+    measurement.at<float>(0) = yaw_m[1];
+    measurement.at<float>(1) = pitch_m[1];
+    measurement.at<float>(2) = v_yaw_m;
+    measurement.at<float>(3) = v_pitch_m;
     kalman.predict();//predict
     pose_correct = kalman.correct(measurement);//update
 }

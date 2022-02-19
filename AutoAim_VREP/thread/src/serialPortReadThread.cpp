@@ -13,7 +13,7 @@ namespace ly {
         simxGetObjectHandle(clientID, "yaw", &yawJoint, simx_opmode_blocking);
         simxGetObjectHandle(clientID, "pitch", &pitchJoint, simx_opmode_blocking);
         receive_.resize(150);
-         start(10000);
+         start(1000);
     }
 
     serialPortReadThread::~serialPortReadThread() {

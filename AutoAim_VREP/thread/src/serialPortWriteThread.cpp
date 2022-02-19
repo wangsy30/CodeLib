@@ -11,7 +11,7 @@ namespace ly{
             clientID=client;
             simxGetObjectHandle(clientID, "yaw", &yawJoint, simx_opmode_blocking);
             simxGetObjectHandle(clientID, "pitch", &pitchJoint, simx_opmode_blocking);
-            start(10000);
+            start(30000);
     }
     serialPortWriteThread::~serialPortWriteThread()
     {

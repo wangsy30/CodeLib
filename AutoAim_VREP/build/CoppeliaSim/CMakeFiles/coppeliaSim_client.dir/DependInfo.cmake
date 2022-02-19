@@ -19,9 +19,16 @@ set(CMAKE_TARGET_DEFINITIONS_C
 
 # The include file search paths:
 set(CMAKE_C_TARGET_INCLUDE_PATH
-  "../CoppeliaSim/remoteApi"
+  "/usr/local/include"
+  "/usr/local/include/opencv"
+  "/usr/local/include/eigen3"
+  "../CoppeliaSim"
   "../CoppeliaSim/include"
+  "../CoppeliaSim/remoteApi"
   "../CoppeliaSim/include/stack"
+  "../thread/inc"
+  "../para"
+  "../ProcessBox"
   )
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/wang/AutoAim_VREP/CoppeliaSim/CoppeliaSim.cpp" "/home/wang/AutoAim_VREP/build/CoppeliaSim/CMakeFiles/coppeliaSim_client.dir/CoppeliaSim.cpp.o"
@@ -50,9 +57,16 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "../CoppeliaSim/remoteApi"
+  "/usr/local/include"
+  "/usr/local/include/opencv"
+  "/usr/local/include/eigen3"
+  "../CoppeliaSim"
   "../CoppeliaSim/include"
+  "../CoppeliaSim/remoteApi"
   "../CoppeliaSim/include/stack"
+  "../thread/inc"
+  "../para"
+  "../ProcessBox"
   )
 
 # Targets to which this target links.

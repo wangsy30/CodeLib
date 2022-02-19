@@ -13,7 +13,7 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/usr/local/include"
   "/usr/local/include/opencv"
-  "/usr/include/eigen3"
+  "/usr/local/include/eigen3"
   "../CoppeliaSim"
   "../CoppeliaSim/include"
   "../CoppeliaSim/remoteApi"

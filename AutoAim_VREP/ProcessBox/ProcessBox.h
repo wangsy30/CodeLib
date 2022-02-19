@@ -19,7 +19,7 @@ private:
     float v_yaw_m,v_pitch_m;//measurement of the ceter's velocity
 
     cv::KalmanFilter kalman;
-    int dt = 0.03;
+    float dt = 0.03;
     unsigned char first_time = 1;
     cv::Mat measurement;
     cv::Mat pose_correct;

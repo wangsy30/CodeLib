@@ -17,6 +17,6 @@
     <data>0 0 0 0 0</data>
   </distCoeffs>
 <!-- kalman filter parameters -->
-  <R>1e-5</R>
-  <Q>1e-5</Q>
+  <R>1e-1</R>
+  <Q>1e-3</Q>
 </opencv_storage>

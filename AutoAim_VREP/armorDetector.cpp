@@ -47,12 +47,14 @@ namespace ly
         sendData send_data;//msg to send
         std::vector<receiveData> receive_data;
         receiveData Data;
+        int start_num = 100;
         cv::waitKey(3000);
+        startWindowThread();
         while (true) {
 #if defined(_READ_)
             receive_data = serialPortRead_->getReceiveMsg();//get data from imu
             Data = receive_data.at(receive_data.size()-1);
-            cout << "[receive] yaw: " << Data.yaw << "   pitch: " << Data.pitch << endl;
+            // cout << "[receive] yaw: " << Data.yaw << "   pitch: " << Data.pitch << endl;
 #endif 
 
 #if defined(_CAM_) && defined(_WRITE_)
@@ -92,6 +94,12 @@ namespace ly
             cv::line(src,cv::Point(src.cols/2-30,src.rows/2),cv::Point(src.cols/2+30,src.rows/2),cv::Scalar(0,0,255),2);
             cv::line(src,cv::Point(src.cols/2,src.rows/2-30),cv::Point(src.cols/2,src.rows/2+30),cv::Scalar(0,0,255),2);
             
+            if(start_num > 0) {
+                start_num--;
+                imshow("dst",src);
+                continue;
+            }
+
             CORNERS.clear();
             if(!process_.FigureProcess(src,CORNERS,src_roi)){
                 cout << "target lost !" << endl;
